@@ -17,6 +17,9 @@ pi:
 win:
 	make client_win
 	make server_win
+mips:
+	make client_mips
+	make server_mips
 debug:
 	make client_debug
 	make server_debug
@@ -35,7 +38,9 @@ client_pi:
 	@GOOS=linux GOARCH=arm go build -ldflags "-s -w" -o bin/pi/dtunnel client.go
 client_win:
 	@GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o bin/windows/dtunnel.exe client.go
-
+#For Xiaomi mini Board
+client_mips:                                                                                                                                               
+	@GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -ldflags "-s -w" -o bin/mipsle/dtunnel client.go
 
 server:
 	@go build -ldflags "-s -w" -o bin/dtunnel_s server.go
@@ -45,6 +50,9 @@ server_pi:
 	@GOOS=linux GOARCH=arm go build -ldflags "-s -w" -o bin/pi/dtunnel_s server.go
 server_win:
 	@GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o bin/windows/dtunnel_s.exe server.go
+server_mips:                                                                                                                                               
+	@GOOS=linux GOARCH=mipsle GOMIPS=softfloat go build -ldflags "-s -w" -o bin/mipsle/dtunnel_s server.go
+
 
 clean:
 	@rm -rf bin/*
