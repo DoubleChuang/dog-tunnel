@@ -107,14 +107,20 @@ func _adminKickServer(w http.ResponseWriter, r *http.Request) (result string, bS
 
 func _adminGetServers(w http.ResponseWriter, r *http.Request) (result string, bSuccess bool) {
 	arr := make(map[string]([]string))
+	var userName string
 	for _, server := range common.Conn2ClientInfo {
 		if server.IsServer {
-			_arr, bHave := arr[server.UserName]
-			if bHave {
-				arr[server.UserName] = append(_arr, server.ServerName)
-				arr[server.UserName] = append(arr[server.UserName], server.Conn.RemoteAddr().String())
+			if server.UserName == "" {
+				userName = "default"
 			} else {
-				arr[server.UserName] = []string{server.ServerName, server.Conn.RemoteAddr().String()}
+				userName = server.UserName
+			}
+			_arr, bHave := arr[userName]
+			if bHave {
+				arr[userName] = append(_arr, server.ServerName)
+				arr[userName] = append(arr[userName], server.Conn.RemoteAddr().String())
+			} else {
+				arr[userName] = []string{server.ServerName, server.Conn.RemoteAddr().String()}
 			}
 		}
 	}
